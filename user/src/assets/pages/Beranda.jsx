@@ -5,6 +5,7 @@ import Gambar1 from "../images/Gambar1.png";
 import Gambar2 from "../images/Gambar2.png";
 import Gambar3 from "../images/Gambar3.png";
 import Gambar4 from "../images/Gambar4.png";
+import { Link } from "react-router-dom";
 import "./Beranda.css";
 
 const Beranda = () => {
@@ -24,9 +25,9 @@ const Beranda = () => {
         <h4 className="mb-5">
           Jelajahi, Nikmati Dan Abadikan Momen Terindah Disurga Tersembunyi Ini!
         </h4>
-        <button to="/destinasi" className="btn mt-3 bg-color">
+        <Link to="/destinasi" className="btn mt-3 bg-color">
           Explorre Wisata
-        </button>
+        </Link>
       </div>
       <div
         id="carouselExample"

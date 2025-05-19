@@ -6,3 +6,7 @@
 .cimais {
   color: #8ed6db;
 }
+
+.btn:hover {
+  background-color: #8ed6db;
+}
