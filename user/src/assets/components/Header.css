@@ -1,0 +1,56 @@
+@font-face {
+  font-family: "Princess Sofia";
+  src: url("./assets/fonts/PrincessSofia.woff2") format("woff2"),
+    url("./assets/fonts/PrincessSofia.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+.bg-brown {
+  background-color: #896e6e;
+}
+
+.text {
+  color: white;
+  font-family: "Princess Sofia", cursive;
+  font-size: 40px;
+  margin-left: 30px;
+}
+
+.ciamis {
+  color: #8ed6db;
+}
+
+.subtext {
+  color: white;
+  margin-left: 12px;
+}
+
+.logo {
+  font-family: "Cursive", sans-serif;
+  color: #8ed6db;
+}
+
+.tagline {
+  color: #8ed6db;
+}
+
+.nav-item {
+  font-size: 20px;
+}
+
+.nav-link {
+  color: white;
+  margin: 0 50px;
+  text-decoration: none;
+  font-size: 20px;
+}
+
+.nav-link:hover {
+  color: #8ed6db;
+}
+
+.nav-link.active {
+  background-color: #896e6e;
+  color: #8ed6db !important;
+}
