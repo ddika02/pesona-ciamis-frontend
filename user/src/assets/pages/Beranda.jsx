@@ -14,7 +14,7 @@ const Beranda = () => {
         className="position-absolute top-0 start-0 text-white text-start mt-4 ms-3 z-1"
         style={{ maxWidth: "500px" }}
       >
-        <h1 className="fw-bold mt-5 mb-3">
+        <h1 className="fw-bold mt-5 mb-3 text-selamat">
           Selamat Datang Di Wisata <span className="cimais">Ciamis</span>!
         </h1>
         <h3 className="fw-bold mb-5">
