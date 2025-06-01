@@ -45,7 +45,7 @@ const Sidebar = () => {
       style={{ width: "250px" }}
     >
       <div>
-        <div className="mb-4 text-center fw-bold fs-4">Admin</div>
+        <div className="mb-4 text-center fw-bold fs-4">ADMIN</div>
         <ul className="nav flex-column">
           {menuItems.map((item, index) => (
             <li className="nav-item" key={index}>
