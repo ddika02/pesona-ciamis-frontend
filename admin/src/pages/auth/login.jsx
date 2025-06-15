@@ -1,14 +1,37 @@
-import React from "react";
+import React, { useState } from "react";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import bgImage from "../../assets/background.png";
 
 const Login = () => {
-  const navigate = useNavigate(); // ⬅️ Hook untuk navigasi
+  const navigate = useNavigate();
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // logika login bisa ditambah nanti
-    navigate("/dashboard"); // ⬅️ Arahkan ke dashboard
+
+    try {
+      const res = await fetch("http://localhost:5000/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }), // ⬅️ Kirim 'username'
+      });
+
+      const data = await res.json();
+      console.log(data);
+
+      // ✅ Sesuaikan dengan struktur response server
+      if (data.status === "success") {
+        localStorage.setItem("token", data.data.token); // ambil dari data.data.token
+        navigate("/dashboard");
+      } else {
+        alert("Login gagal: " + data.message);
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      alert("Terjadi kesalahan saat login.");
+    }
   };
 
   return (
@@ -26,10 +49,12 @@ const Login = () => {
           <div className="mb-3">
             <label htmlFor="email" className="form-label text-white"></label>
             <input
-              type="email"
+              type="username"
               className="form-control"
-              id="email"
-              placeholder="Masukan Akun"
+              id="username"
+              placeholder="Masukan Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               style={{
                 backgroundColor: "#D9D9D9",
                 border: "none",
@@ -44,6 +69,8 @@ const Login = () => {
               className="form-control"
               id="password"
               placeholder="Masukan Kata Sandi"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               style={{
                 backgroundColor: "#D9D9D9",
                 border: "none",
