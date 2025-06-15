@@ -1,23 +1,39 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
+import axios from "axios";
 
 const HubungiKami = () => {
   const [nama, setNama] = useState("");
   const [email, setEmail] = useState("");
   const [pesan, setPesan] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert(`Terima kasih, ${nama}! Pesan Anda sudah terkirim.`);
-    // Di sini kamu bisa tambahkan logic kirim data ke server
-    setNama("");
-    setEmail("");
-    setPesan("");
-  };
 
+    try {
+      const res = await axios.post("http://localhost:5000/api/kritik-saran", {
+        nama,
+        email,
+        pesan,
+      });
+
+      if (res.data.status === "success") {
+        alert(`Terima kasih, ${nama}! Pesan Anda sudah terkirim.`);
+        setNama("");
+        setEmail("");
+        setPesan("");
+      } else {
+        alert("Gagal mengirim pesan.");
+      }
+    } catch (error) {
+      console.error("Gagal kirim:", error);
+      alert("Terjadi kesalahan saat mengirim pesan.");
+    }
+  };
   return (
     <>
+      {/* Form Kritik & Saran */}
       <div className="container mt-5 mb-5" style={{ maxWidth: "1000px" }}>
         <h2 className="mt-5 mb-5 text-center" style={{ color: "#40E0D0" }}>
           Masukan Kritik & Saran
