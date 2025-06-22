@@ -1,3 +1,23 @@
 .warna {
   color: #8ed6db;
 }
+
+.destinasi-card {
+  border-radius: 20px;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+.destinasi-card:hover {
+  transform: scale(1.02);
+}
+.btn-lihat {
+  background-color: #57e0e0;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 10px;
+  padding: 8px 20px;
+}
+.btn-lihat:hover {
+  background-color: #44c7c7;
+}
