@@ -9,7 +9,8 @@ const Dashboard = () => {
     axios
       .get("http://localhost:5000/api/destinasi")
       .then((res) => {
-        setJumlahDestinasi(res.data.length);
+        const dataArray = res.data.data || [];
+        setJumlahDestinasi(dataArray.length);
       })
       .catch((err) => {
         console.error("Gagal mengambil destinasi:", err);
