@@ -16,52 +16,54 @@ import { motion } from "framer-motion";
 const Beranda = () => {
   return (
     <div className="position-relative">
-      <motion.div
-        initial={{ x: -200, opacity: 0 }} // mulai dari kiri & transparan
-        animate={{ x: 0, opacity: 1 }} // menuju ke posisi normal & terlihat
-        transition={{ duration: 1, ease: "easeOut" }} // durasi dan gaya animasi
-        className="position-absolute top-0 start-0 text-white text-start mt-4 ms-3 z-1"
-        style={{ maxWidth: "500px" }}
-      >
-        <h1 className="fw-bold mt-5 mb-3">
-          Selamat Datang Di Wisata <span className="cimais">Ciamis</span>!
-        </h1>
-        <h3 className="fw-bold mb-5">
-          Rasakan Kesejukan Alam, Keindahan Yang Disajikan Alam, Dan Ketenangan
-          Yang Menyegarkan Jiwa
-        </h3>
-        <h4 className="mb-5">
-          Jelajahi, Nikmati Dan Abadikan Momen Terindah Disurga Tersembunyi Ini!
-        </h4>
-        <Link to="/destinasi" className="btn mt-3 bg-color">
-          Explorre Wisata
-        </Link>
-      </motion.div>
+      <div className="position-relative">
+        <div
+          id="carouselExample"
+          className="carousel slide"
+          data-bs-ride="carousel"
+          data-bs-interval="3000"
+        >
+          <div className="carousel-inner">
+            <div className="carousel-item active">
+              <img src={Gambar1} className="d-block w-100" alt="Gambar 1" />
+            </div>
+            <div className="carousel-item">
+              <img src={Gambar2} className="d-block w-100" alt="Gambar 2" />
+            </div>
+            <div className="carousel-item">
+              <img src={Gambar3} className="d-block w-100" alt="Gambar 3" />
+            </div>
+            <div className="carousel-item">
+              <img src={Gambar4} className="d-block w-100" alt="Gambar 4" />
+            </div>
+          </div>
 
-      <div
-        id="carouselExample"
-        className="carousel slide"
-        data-bs-ride="carousel"
-        data-bs-interval="3000"
-      >
-        <div className="carousel-inner">
-          <div className="carousel-item active">
-            <img src={Gambar1} className="d-block w-100" alt="Gambar 1" />
-          </div>
-          <div className="carousel-item">
-            <img src={Gambar2} className="d-block w-100" alt="Gambar 2" />
-          </div>
-          <div className="carousel-item">
-            <img src={Gambar3} className="d-block w-100" alt="Gambar 3" />
-          </div>
-          <div className="carousel-item">
-            <img src={Gambar4} className="d-block w-100" alt="Gambar 4" />
-          </div>
+          {/* Teks berada DI DALAM area carousel */}
+          <motion.div
+            initial={{ x: -200, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ duration: 1, ease: "easeOut" }}
+            className="overlay-text-container text-white text-start"
+          >
+            <h1 className="fw-bold">
+              Selamat Datang Di Wisata <span className="cimais">Ciamis</span>!
+            </h1>
+            <h3 className="fw-bold">
+              Rasakan Kesejukan Alam, Keindahan Yang Disajikan Alam, Dan
+              Ketenangan Yang Menyegarkan Jiwa
+            </h3>
+            <h4>
+              Jelajahi, Nikmati Dan Abadikan Momen Terindah Disurga Tersembunyi
+              Ini!
+            </h4>
+            <Link to="/destinasi" className="btn mt-3 bg-color px-4 py-2">
+              Explore Wisata
+            </Link>
+          </motion.div>
         </div>
       </div>
 
       <div className="row g-4 px-4 mt-5">
-        {/* Judul muncul dari atas */}
         <motion.h1
           className="text-center fw-bold mb-4 cimais"
           initial={{ y: -50, opacity: 0 }}
@@ -71,7 +73,6 @@ const Beranda = () => {
           Beberapa Destinasi Ciamis
         </motion.h1>
 
-        {/* Komponen Destinasi - dengan delay animasi */}
         {[Destinasi1, Destinasi2, Destinasi3].map((image, index) => {
           const titles = [
             "Ciung Wanara",
@@ -87,7 +88,7 @@ const Beranda = () => {
           return (
             <motion.div
               key={index}
-              className="col-md-4"
+              className="col-12 col-sm-6 col-md-4 mb-4"
               initial={{ x: -100, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.3 * (index + 1) }}
@@ -97,7 +98,7 @@ const Beranda = () => {
                   <img
                     src={image}
                     alt={titles[index]}
-                    className="img-fluid rounded"
+                    className="img-fluid rounded h-75"
                     style={{ transition: "filter 0.3s ease" }}
                   />
                   <div className="position-absolute bottom-0 start-0 w-100 bg-opacity-50 p-3 rounded-bottom">
@@ -114,7 +115,6 @@ const Beranda = () => {
       </div>
 
       <div className="row g-4 px-4 mt-5 mb-5">
-        {/* Judul muncul dari belakang dan membesar */}
         <motion.h1
           className="text-center fw-bold mb-4 cimais"
           initial={{ scale: 0.5, opacity: 0 }}
@@ -124,10 +124,9 @@ const Beranda = () => {
           Kenapa Harus Wisata Ke Ciamis?
         </motion.h1>
 
-        <div className="row align-items-center ps-5">
-          {/* Gambar muncul dari samping kiri */}
+        <div className="row align-items-center ps-3">
           <motion.div
-            className="col-md-4"
+            className="col-12 col-md-4 mb-3 text-center"
             initial={{ x: -100, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ duration: 1 }}
@@ -135,22 +134,18 @@ const Beranda = () => {
             <img
               src={Ciamis}
               alt="Keindahan Alam"
-              className="img-fluid rounded shadow d-block"
+              className="img-fluid rounded shadow d-block mx-auto"
               style={{ maxHeight: "350px", objectFit: "cover" }}
             />
           </motion.div>
 
-          {/* Deskripsi muncul dari kanan */}
           <motion.div
-            className="col-md-6"
+            className="col-12 col-md-6"
             initial={{ x: 100, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ duration: 1 }}
           >
-            <p
-              className="fs-5 mt-5 fw-bold custom-font"
-              style={{ textAlign: "justify" }}
-            >
+            <p className="fs-5 mt-3 fw-bold custom-font text-justify">
               Karena Ciamis berkembang sebagai daerah wisata yang memadukan
               sejarah, budaya, dan keindahan alam. Beberapa destinasi bersejarah
               dapat dikunjungi, menjadikan Ciamis bukan hanya sekadar tempat

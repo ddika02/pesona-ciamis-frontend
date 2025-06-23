@@ -50,3 +50,33 @@
   font-size: 14px;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
 }
+
+/* Ukuran default carousel */
+#carouselGambar {
+  width: 600px;
+  height: 300px;
+}
+
+/* Ukuran gambar di dalam carousel selalu ikut penuh */
+#carouselGambar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Responsif untuk tablet & mobile */
+@media (max-width: 768px) {
+  #carouselGambar {
+    width: 90%;
+    height: 200px;
+  }
+}
+
+/* Lebih kecil lagi untuk HP ukuran kecil */
+@media (max-width: 576px) {
+  #carouselGambar {
+    width: 75%;
+    height: 180px;
+    margin: 50px;
+  }
+}

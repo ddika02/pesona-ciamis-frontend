@@ -110,7 +110,6 @@ const DetailDestinasi = () => {
             id="carouselGambar"
             className="carousel slide position-relative"
             data-bs-ride="carousel"
-            style={{ width: "600px", height: "300px" }}
           >
             <div className="carousel-inner w-100 h-100">
               {gambar.map((g, i) => (

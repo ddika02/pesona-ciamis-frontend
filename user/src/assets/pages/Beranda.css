@@ -1,3 +1,9 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+
+.custom-font {
+  font-family: "Poppins", sans-serif;
+}
+
 .bg-color {
   background-color: #8ed6db;
   color: white;
@@ -7,6 +13,77 @@
   color: #8ed6db;
 }
 
-.btn:hover {
-  background-color: #8ed6db;
+.img-hover img {
+  transition: filter 0.3s ease;
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.img-hover:hover img {
+  filter: contrast(1.2) brightness(1.1);
+}
+
+.text-justify {
+  text-align: justify;
+}
+
+/* Overlay text container di atas carousel */
+.overlay-text-container {
+  position: absolute;
+  top: 15%;
+  left: 5%;
+  max-width: 500px;
+  z-index: 2;
+  padding: 10px;
+}
+
+@media (max-width: 768px) {
+  .overlay-text-container {
+    top: 10%;
+    left: 5%;
+    max-width: 90%;
+  }
+
+  .overlay-text-container h1 {
+    font-size: 1.5rem;
+  }
+
+  .overlay-text-container h3 {
+    font-size: 1rem;
+  }
+
+  .overlay-text-container h4 {
+    font-size: 0.9rem;
+  }
+
+  .overlay-text-container .btn {
+    font-size: 0.85rem;
+    padding: 6px 12px;
+  }
+
+  .carousel-item img {
+    height: 300px;
+    object-fit: cover;
+  }
+}
+
+/* Ukuran font responsif tambahan untuk elemen umum */
+@media (max-width: 576px) {
+  .fs-5 {
+    font-size: 1rem;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+}
+
+/* Warna garis-garis toggle jadi putih */
+.navbar-toggler {
+  border-color: white;
+}
+
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255, 255, 255, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
 }
