@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./DetailDestinasi.css";
 import ModalTambahUlasan from "../components/ModalTambahUlasan";
+import Swal from "sweetalert2";
 
 const DetailDestinasi = () => {
   const { id } = useParams();
@@ -42,7 +43,11 @@ const DetailDestinasi = () => {
 
   const handleKirimUlasan = () => {
     if (!namaInput.trim() || !ratingInput || !ulasanInput.trim()) {
-      alert("Isi semua form terlebih dahulu.");
+      Swal.fire({
+        icon: "warning",
+        title: "Form Tidak Lengkap",
+        text: "Isi semua form terlebih dahulu.",
+      });
       return;
     }
 
@@ -62,27 +67,37 @@ const DetailDestinasi = () => {
         return res.json();
       })
       .then((data) => {
-        alert("Ulasan berhasil dikirim.");
+        Swal.fire({
+          icon: "success",
+          title: "Berhasil",
+          text: "Ulasan berhasil dikirim.",
+          timer: 2000,
+          showConfirmButton: false,
+        });
+
         setShowModal(false);
         setNamaInput("");
         setRatingInput(0);
         setUlasanInput("");
 
-        // Langsung tambahkan ke daftar ulasan tanpa reload
         setDataUlasan((prev) => [
           {
-            id: data.data.id, // pastikan backend mengirim id baru
+            id: data.data.id,
             nama_pengulas: namaInput,
             rating: ratingInput,
             komentar: ulasanInput,
-            tanggal: data.data.tanggal, // pastikan backend kirim tanggal
+            tanggal: data.data.tanggal,
           },
-          ...prev, // ulasan baru ditaruh paling atas
+          ...prev,
         ]);
       })
       .catch((err) => {
         console.error(err);
-        alert("Terjadi kesalahan. Pastikan semua form sudah diisi.");
+        Swal.fire({
+          icon: "error",
+          title: "Gagal",
+          text: "Terjadi kesalahan. Pastikan semua form sudah diisi.",
+        });
       });
   };
 

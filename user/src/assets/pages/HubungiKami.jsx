@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 const HubungiKami = () => {
   const [nama, setNama] = useState("");
@@ -19,18 +20,34 @@ const HubungiKami = () => {
       });
 
       if (res.data.status === "success") {
-        alert(`Terima kasih, ${nama}! Pesan Anda sudah terkirim.`);
+        Swal.fire({
+          icon: "success",
+          title: "Terima kasih!",
+          text: `Pesan Anda berhasil terkirim, ${nama}.`,
+          timer: 2000,
+          showConfirmButton: false,
+        });
+
         setNama("");
         setEmail("");
         setPesan("");
       } else {
-        alert("Gagal mengirim pesan.");
+        Swal.fire({
+          icon: "error",
+          title: "Gagal",
+          text: "Gagal mengirim pesan.",
+        });
       }
     } catch (error) {
       console.error("Gagal kirim:", error);
-      alert("Terjadi kesalahan saat mengirim pesan.");
+      Swal.fire({
+        icon: "error",
+        title: "Terjadi Kesalahan",
+        text: "Terjadi kesalahan saat mengirim pesan.",
+      });
     }
   };
+
   return (
     <>
       {/* Form Kritik & Saran */}
