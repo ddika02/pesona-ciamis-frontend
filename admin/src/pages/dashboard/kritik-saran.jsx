@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 const AdminKritikSaran = () => {
   const [kritikList, setKritikList] = useState([]);
@@ -17,30 +18,59 @@ const AdminKritikSaran = () => {
         }
       );
 
-      console.log("Respon backend:", response.data); // debug
-      setKritikList(response.data.data); // Ambil array dari `data`
+      console.log("Respon backend:", response.data);
+      setKritikList(response.data.data);
       setLoading(false);
     } catch (error) {
       console.error("Gagal mengambil data:", error);
       setLoading(false);
+      Swal.fire({
+        icon: "error",
+        title: "Gagal Memuat Data",
+        text: "Terjadi kesalahan saat mengambil data.",
+      });
     }
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm("Yakin ingin menghapus pesan ini?")) {
-      try {
-        const token = localStorage.getItem("token");
-        await axios.delete(`http://localhost:5000/api/kritik-saran/${id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+    Swal.fire({
+      title: "Yakin ingin menghapus pesan ini?",
+      text: "Data yang dihapus tidak dapat dikembalikan!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Ya, Hapus",
+      cancelButtonText: "Batal",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const token = localStorage.getItem("token");
+          await axios.delete(`http://localhost:5000/api/kritik-saran/${id}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
 
-        fetchKritik();
-      } catch (error) {
-        console.error("Gagal menghapus data:", error);
+          Swal.fire({
+            icon: "success",
+            title: "Berhasil Dihapus",
+            text: "Pesan telah dihapus.",
+            timer: 1500,
+            showConfirmButton: false,
+          });
+
+          fetchKritik();
+        } catch (error) {
+          console.error("Gagal menghapus data:", error);
+          Swal.fire({
+            icon: "error",
+            title: "Gagal Menghapus",
+            text: "Terjadi kesalahan saat menghapus data.",
+          });
+        }
       }
-    }
+    });
   };
 
   useEffect(() => {

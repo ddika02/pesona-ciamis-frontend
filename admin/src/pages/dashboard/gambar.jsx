@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import "./tambahdestinasi.css";
+import Swal from "sweetalert2";
 
 const Gambar = ({ onClose, destinasiId }) => {
   const [gambarList, setGambarList] = useState([]);
   const [file, setFile] = useState(null);
   const [gambarUtama, setGambarUtama] = useState(null);
+  const [namaDestinasi, setNamaDestinasi] = useState("");
 
   const fetchGambar = async () => {
     try {
@@ -24,13 +26,24 @@ const Gambar = ({ onClose, destinasiId }) => {
       );
       const dataDestinasi = await resDestinasi.json();
       setGambarUtama(dataDestinasi.data.gambar_utama);
+      setNamaDestinasi(dataDestinasi.data.nama_destinasi); // Set nama destinasi
     } catch (err) {
       console.error("Gagal mengambil gambar:", err);
     }
   };
 
   const handleUpload = async () => {
-    if (!file) return alert("Pilih file gambar terlebih dahulu.");
+    if (!file) {
+      Swal.fire({
+        icon: "warning",
+        title: "Peringatan",
+        text: "Pilih file gambar terlebih dahulu.",
+        didOpen: () => {
+          document.querySelector(".swal2-container").style.zIndex = 9999;
+        },
+      });
+      return;
+    }
 
     const formData = new FormData();
     formData.append("gambar", file);
@@ -42,29 +55,80 @@ const Gambar = ({ onClose, destinasiId }) => {
         headers: { Authorization: `Bearer ${token}` },
         body: formData,
       });
+
       setFile(null);
       fetchGambar();
+
+      Swal.fire({
+        icon: "success",
+        title: "Berhasil",
+        text: "Gambar berhasil diunggah.",
+        timer: 1500,
+        showConfirmButton: false,
+        didOpen: () => {
+          document.querySelector(".swal2-container").style.zIndex = 9999;
+        },
+      });
     } catch (err) {
       console.error("Gagal mengunggah gambar:", err);
+      Swal.fire({
+        icon: "error",
+        title: "Gagal",
+        text: "Terjadi kesalahan saat mengunggah gambar.",
+        didOpen: () => {
+          document.querySelector(".swal2-container").style.zIndex = 9999;
+        },
+      });
     }
   };
 
   const handleDelete = async (gambarId) => {
-    if (window.confirm("Yakin ingin menghapus gambar ini?")) {
-      try {
-        const token = localStorage.getItem("token");
-        await fetch(
-          `http://localhost:5000/api/destinasi/${destinasiId}/gambar/${gambarId}`,
-          {
-            method: "DELETE",
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
-        fetchGambar();
-      } catch (err) {
-        console.error("Gagal menghapus gambar:", err);
+    Swal.fire({
+      title: "Yakin ingin menghapus gambar ini?",
+      text: "Tindakan ini tidak dapat dibatalkan!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Ya, hapus",
+      cancelButtonText: "Batal",
+      didOpen: () => {
+        document.querySelector(".swal2-container").style.zIndex = 9999;
+      },
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const token = localStorage.getItem("token");
+          await fetch(
+            `http://localhost:5000/api/destinasi/${destinasiId}/gambar/${gambarId}`,
+            {
+              method: "DELETE",
+              headers: { Authorization: `Bearer ${token}` },
+            }
+          );
+          fetchGambar();
+
+          Swal.fire({
+            icon: "success",
+            title: "Berhasil",
+            text: "Gambar berhasil dihapus.",
+            timer: 1500,
+            showConfirmButton: false,
+            didOpen: () => {
+              document.querySelector(".swal2-container").style.zIndex = 9999;
+            },
+          });
+        } catch (err) {
+          console.error("Gagal menghapus gambar:", err);
+          Swal.fire({
+            icon: "error",
+            title: "Gagal",
+            text: "Terjadi kesalahan saat menghapus gambar.",
+            didOpen: () => {
+              document.querySelector(".swal2-container").style.zIndex = 9999;
+            },
+          });
+        }
       }
-    }
+    });
   };
 
   const handleSetThumbnail = async (imgUrl) => {
@@ -72,32 +136,63 @@ const Gambar = ({ onClose, destinasiId }) => {
       ? imgUrl
       : `/uploads/destinasi/${imgUrl}`;
 
-    try {
-      const token = localStorage.getItem("token");
+    Swal.fire({
+      title: "Jadikan gambar ini sebagai thumbnail?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Ya, Set Thumbnail",
+      cancelButtonText: "Batal",
+      didOpen: () => {
+        document.querySelector(".swal2-container").style.zIndex = 9999;
+      },
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const token = localStorage.getItem("token");
 
-      const res = await fetch(
-        `http://localhost:5000/api/destinasi/${destinasiId}/gambar-utama`,
-        {
-          method: "PUT",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ gambar_utama: fullUrl }),
+          const res = await fetch(
+            `http://localhost:5000/api/destinasi/${destinasiId}/gambar-utama`,
+            {
+              method: "PUT",
+              headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ gambar_utama: fullUrl }),
+            }
+          );
+
+          if (!res.ok) {
+            const data = await res.json();
+            throw new Error(data.message || "Gagal update thumbnail.");
+          }
+
+          setGambarUtama(fullUrl);
+          fetchGambar();
+
+          Swal.fire({
+            icon: "success",
+            title: "Berhasil",
+            text: "Thumbnail berhasil diperbarui.",
+            timer: 1500,
+            showConfirmButton: false,
+            didOpen: () => {
+              document.querySelector(".swal2-container").style.zIndex = 9999;
+            },
+          });
+        } catch (err) {
+          console.error("Gagal mengatur thumbnail:", err);
+          Swal.fire({
+            icon: "error",
+            title: "Gagal",
+            text: "Terjadi kesalahan saat mengatur thumbnail.",
+            didOpen: () => {
+              document.querySelector(".swal2-container").style.zIndex = 9999;
+            },
+          });
         }
-      );
-
-      if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.message || "Gagal update thumbnail.");
       }
-
-      setGambarUtama(fullUrl);
-      fetchGambar();
-    } catch (err) {
-      console.error("Gagal mengatur thumbnail:", err);
-      alert("Terjadi kesalahan saat mengatur thumbnail.");
-    }
+    });
   };
 
   useEffect(() => {
@@ -110,7 +205,9 @@ const Gambar = ({ onClose, destinasiId }) => {
         className="modal-container bg-white p-4 rounded shadow"
         style={{ maxHeight: "90vh", overflowY: "auto", width: "900px" }}
       >
-        <h3 className="text-center fw-bold mb-3">Kelola Gambar</h3>
+        <h3 className="text-center fw-bold mb-3">
+          Kelola Gambar {namaDestinasi && `" ${namaDestinasi} "`}
+        </h3>
 
         <div className="mb-3">
           <label className="fw-bold">Unggah Gambar</label>

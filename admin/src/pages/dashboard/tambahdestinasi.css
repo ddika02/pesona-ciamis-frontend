@@ -19,3 +19,7 @@
   background-color: #fff;
   border-radius: 10px;
 }
+
+.swal-zindex {
+  z-index: 9999 !important;
+}

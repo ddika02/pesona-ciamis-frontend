@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import bgImage from "../../assets/background.png";
+import Swal from "sweetalert2";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -15,22 +15,38 @@ const Login = () => {
       const res = await fetch("http://localhost:5000/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }), // ⬅️ Kirim 'username'
+        body: JSON.stringify({ username, password }),
       });
 
       const data = await res.json();
       console.log(data);
 
-      // ✅ Sesuaikan dengan struktur response server
       if (data.status === "success") {
-        localStorage.setItem("token", data.data.token); // ambil dari data.data.token
-        navigate("/dashboard");
+        localStorage.setItem("token", data.data.token);
+
+        Swal.fire({
+          icon: "success",
+          title: "Login Berhasil",
+          text: "Selamat datang!",
+          timer: 2000,
+          showConfirmButton: false,
+        }).then(() => {
+          navigate("/dashboard");
+        });
       } else {
-        alert("Login gagal: " + data.message);
+        Swal.fire({
+          icon: "error",
+          title: "Login Gagal",
+          text: data.message || "Username atau Password salah!",
+        });
       }
     } catch (error) {
       console.error("Login error:", error);
-      alert("Terjadi kesalahan saat login.");
+      Swal.fire({
+        icon: "error",
+        title: "Terjadi Kesalahan",
+        text: "Tidak dapat terhubung ke server.",
+      });
     }
   };
 
@@ -47,9 +63,8 @@ const Login = () => {
         <h2 className="text-center mb-4 text-white">Login</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
-            <label htmlFor="email" className="form-label text-white"></label>
             <input
-              type="username"
+              type="text"
               className="form-control"
               id="username"
               placeholder="Masukan Username"
@@ -63,7 +78,6 @@ const Login = () => {
             />
           </div>
           <div className="mb-4">
-            <label htmlFor="password" className="form-label text-white"></label>
             <input
               type="password"
               className="form-control"

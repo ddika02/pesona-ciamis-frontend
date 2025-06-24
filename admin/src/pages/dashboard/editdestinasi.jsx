@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import Swal from "sweetalert2";
 
-const EditDestinasi = ({ onClose, onUpdate, data }) => {
+const EditDestinasi = ({ onClose, onUpdate, initialData }) => {
   const [form, setForm] = useState({
     nama_destinasi: "",
     alamat: "",
@@ -12,20 +13,19 @@ const EditDestinasi = ({ onClose, onUpdate, data }) => {
     deskripsi: "",
   });
 
-  // Isi form saat `data` tersedia
   useEffect(() => {
-    if (data) {
+    if (initialData) {
       setForm({
-        nama_destinasi: data.nama_destinasi || "",
-        alamat: data.alamat || "",
-        asal_usul: data.asal_usul || "",
-        daya_tarik: data.daya_tarik || "",
-        fasilitas: data.fasilitas || "",
-        harga_jam: data.harga_jam || "",
-        deskripsi: data.deskripsi || "",
+        nama_destinasi: initialData.nama_destinasi || "",
+        alamat: initialData.alamat || "",
+        asal_usul: initialData.asal_usul || "",
+        daya_tarik: initialData.daya_tarik || "",
+        fasilitas: initialData.fasilitas || "",
+        harga_jam: initialData.harga_jam || "",
+        deskripsi: initialData.deskripsi || "",
       });
     }
-  }, [data]);
+  }, [initialData]);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -34,18 +34,32 @@ const EditDestinasi = ({ onClose, onUpdate, data }) => {
   const handleSubmit = async () => {
     try {
       const token = localStorage.getItem("token");
-      await axios.put(`http://localhost:5000/api/destinasi/${data.id}`, form, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
+      await axios.put(
+        `http://localhost:5000/api/destinasi/${initialData.id}`,
+        form,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      Swal.fire({
+        icon: "success",
+        title: "Berhasil",
+        text: "Data berhasil diperbarui.",
+        timer: 1500,
+        showConfirmButton: false,
       });
-      alert("Data berhasil diperbarui.");
       if (onUpdate) onUpdate(form);
       onClose();
     } catch (error) {
       console.error("Update gagal:", error);
-      alert("Terjadi kesalahan saat menyimpan data.");
+      Swal.fire({
+        icon: "error",
+        title: "Gagal",
+        text: "Terjadi kesalahan saat menyimpan data.",
+      });
     }
   };
 

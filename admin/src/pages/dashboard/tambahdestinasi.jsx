@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "./tambahdestinasi.css";
+import Swal from "sweetalert2";
 
 const TambahDestinasi = ({ onClose, onSave }) => {
   const [form, setForm] = useState({
@@ -21,7 +22,11 @@ const TambahDestinasi = ({ onClose, onSave }) => {
 
   const handleSubmit = async () => {
     if (!form.nama_destinasi.trim() || !form.alamat.trim()) {
-      alert("Nama destinasi dan alamat wajib diisi.");
+      Swal.fire({
+        icon: "warning",
+        title: "Peringatan",
+        text: "Nama destinasi dan alamat wajib diisi.",
+      });
       return;
     }
 
@@ -40,18 +45,28 @@ const TambahDestinasi = ({ onClose, onSave }) => {
         }
       );
 
+      Swal.fire({
+        icon: "success",
+        title: "Berhasil",
+        text: "Destinasi berhasil ditambahkan.",
+        timer: 1500,
+        showConfirmButton: false,
+      });
+
       if (onSave) {
         onSave(response.data);
       }
 
-      alert("Destinasi berhasil ditambahkan!");
       onClose();
     } catch (error) {
       console.error("Gagal menyimpan destinasi:", error);
-      alert(
-        error?.response?.data?.message ||
-          "Terjadi kesalahan saat menyimpan destinasi."
-      );
+      Swal.fire({
+        icon: "error",
+        title: "Gagal",
+        text:
+          error?.response?.data?.message ||
+          "Terjadi kesalahan saat menyimpan destinasi.",
+      });
     } finally {
       setLoading(false);
     }

@@ -3,6 +3,7 @@ import axios from "axios";
 import TambahDestinasi from "./tambahdestinasi";
 import EditDestinasi from "./editdestinasi";
 import Gambar from "./gambar";
+import Swal from "sweetalert2";
 
 const Destinasi = () => {
   const [destinasiList, setDestinasiList] = useState([]);
@@ -17,9 +18,7 @@ const Destinasi = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.get("http://localhost:5000/api/destinasi", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
       setDestinasiList(response.data.data);
       setLoading(false);
@@ -30,58 +29,45 @@ const Destinasi = () => {
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm("Yakin ingin menghapus destinasi ini?")) {
-      try {
-        const token = localStorage.getItem("token");
-        await axios.delete(`http://localhost:5000/api/destinasi/${id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        fetchDestinasi();
-      } catch (error) {
-        console.error("Gagal menghapus destinasi:", error);
+    Swal.fire({
+      title: "Yakin ingin menghapus destinasi ini?",
+      text: "Data yang dihapus tidak dapat dikembalikan!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Ya, Hapus",
+      cancelButtonText: "Batal",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const token = localStorage.getItem("token");
+          await axios.delete(`http://localhost:5000/api/destinasi/${id}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          fetchDestinasi();
+          Swal.fire({
+            icon: "success",
+            title: "Berhasil",
+            text: "Destinasi telah dihapus.",
+            timer: 1500,
+            showConfirmButton: false,
+          });
+        } catch (error) {
+          console.error("Gagal menghapus destinasi:", error);
+          Swal.fire({
+            icon: "error",
+            title: "Gagal",
+            text: "Terjadi kesalahan saat menghapus data.",
+          });
+        }
       }
-    }
-  };
-
-  const handleSaveDestinasi = async (dataBaru) => {
-    try {
-      const token = localStorage.getItem("token");
-      await axios.post("http://localhost:5000/api/destinasi", dataBaru, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setShowModal(false);
-      fetchDestinasi();
-    } catch (error) {
-      console.error("Gagal menyimpan destinasi:", error);
-    }
+    });
   };
 
   const handleEditClick = (item) => {
     setSelectedData(item);
     setShowEditModal(true);
-  };
-
-  const handleUpdateDestinasi = async (updatedData) => {
-    try {
-      const token = localStorage.getItem("token");
-      await axios.put(
-        `http://localhost:5000/api/destinasi/${updatedData.id}`,
-        updatedData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      setShowEditModal(false);
-      fetchDestinasi();
-    } catch (error) {
-      console.error("Gagal memperbarui data:", error);
-    }
   };
 
   const handleGambarClick = (id) => {
@@ -175,16 +161,20 @@ const Destinasi = () => {
 
       {showModal && (
         <TambahDestinasi
-          onClose={() => setShowModal(false)}
-          onSave={handleSaveDestinasi}
+          onClose={() => {
+            setShowModal(false);
+            fetchDestinasi(); // Refresh data setelah tambah
+          }}
         />
       )}
 
       {showEditModal && (
         <EditDestinasi
-          onClose={() => setShowEditModal(false)}
-          onUpdate={handleUpdateDestinasi}
-          data={selectedData}
+          onClose={() => {
+            setShowEditModal(false);
+            fetchDestinasi(); // Refresh data setelah edit
+          }}
+          initialData={selectedData}
         />
       )}
 
