@@ -43,7 +43,12 @@ const Beranda = () => {
             initial={{ x: -200, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ duration: 1, ease: "easeOut" }}
-            className="overlay-text-container text-white text-start"
+            className="overlay-text-container text-white text-start p-4 rounded"
+            style={{
+              backgroundColor: "rgba(0, 0, 0, 0.5)", // Hitam transparan
+              maxWidth: "600px",
+              backdropFilter: "blur(5px)", // Tambah efek blur latar belakang
+            }}
           >
             <h1 className="fw-bold">
               Selamat Datang Di Wisata <span className="cimais">Ciamis</span>!
