@@ -11,6 +11,20 @@ const ModalTambahUlasan = ({
   namaInput,
   onSubmit,
 }) => {
+  const [sembunyikanIdentitas, setSembunyikanIdentitas] = useState(false);
+
+  // Saat centang, otomatis isi nama jadi "Anonim"
+  const handleCheckboxChange = (e) => {
+    const isChecked = e.target.checked;
+    setSembunyikanIdentitas(isChecked);
+
+    if (isChecked) {
+      setNamaInput("Anonim");
+    } else {
+      setNamaInput("");
+    }
+  };
+
   return (
     <div
       style={{
@@ -54,11 +68,25 @@ const ModalTambahUlasan = ({
         </div>
 
         <input
-          className="form-control mb-3"
+          className="form-control mb-2"
           placeholder="Nama Anda"
           value={namaInput}
           onChange={(e) => setNamaInput(e.target.value)}
+          disabled={sembunyikanIdentitas}
         />
+
+        <div className="form-check mb-3 text-start">
+          <input
+            className="form-check-input"
+            type="checkbox"
+            id="sembunyikanIdentitas"
+            checked={sembunyikanIdentitas}
+            onChange={handleCheckboxChange}
+          />
+          <label className="form-check-label" htmlFor="sembunyikanIdentitas">
+            Kirim sebagai Anonim
+          </label>
+        </div>
 
         <textarea
           className="form-control mb-4"
