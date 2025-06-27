@@ -102,7 +102,10 @@ const Destinasi = () => {
       ) : (
         <div className="table-responsive">
           <table className="table align-middle">
-            <thead style={{ backgroundColor: "#2dd4bf", color: "white" }}>
+            <thead
+              table-dark
+              style={{ backgroundColor: "#2dd4bf", color: "white" }}
+            >
               <tr className="text-center">
                 <th style={{ width: "50px" }}>NO</th>
                 <th>Nama Destinasi</th>
